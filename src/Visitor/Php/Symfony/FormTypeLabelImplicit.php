@@ -11,8 +11,6 @@
 
 namespace Translation\Extractor\Visitor\Php\Symfony;
 
-use PhpParser\ConstExprEvaluationException;
-use PhpParser\ConstExprEvaluator;
 use PhpParser\Node;
 use PhpParser\NodeVisitor;
 
