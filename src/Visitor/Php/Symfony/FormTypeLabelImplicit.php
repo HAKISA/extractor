@@ -11,6 +11,8 @@
 
 namespace Translation\Extractor\Visitor\Php\Symfony;
 
+use PhpParser\ConstExprEvaluationException;
+use PhpParser\ConstExprEvaluator;
 use PhpParser\Node;
 use PhpParser\NodeVisitor;
 
@@ -49,11 +51,11 @@ final class FormTypeLabelImplicit extends AbstractFormType implements NodeVisito
             if (count($node->args) >= 3) {
                 if ($node->args[2]->value instanceof Node\Expr\Array_) {
                     foreach ($node->args[2]->value->items as $item) {
-                        if (isset($item->key) && 'label' === $item->key->value) {
+                        if (isset($item->key) && $item->key instanceof Node\Scalar\String_ && 'label' === $item->key->value) {
                             $skipLabel = true;
                         }
 
-                        if (isset($item->key) && 'translation_domain' === $item->key->value) {
+                        if (isset($item->key) && $item->key instanceof Node\Scalar\String_ && 'translation_domain' === $item->key->value) {
                             if ($item->value instanceof Node\Scalar\String_) {
                                 $domain = $item->value->value;
                             } elseif ($item->value instanceof Node\Expr\ConstFetch && 'false' === $item->value->name->toString()) {
